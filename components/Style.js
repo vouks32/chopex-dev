@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
 	defaultScollView: {
 		flex: 1,
 		backgroundColor: "#FFFFFF",
-		paddingTop: 30,
+		paddingTop: 40,
 		paddingBottom: 188,
 	},
 	primaryButton: {
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		marginBottom: 6,
 		textAlign: "center"
-	  },
+	},
 	textInput: {
 		height: 50,
 		backgroundColor: "#7AEC6733",
@@ -60,6 +60,25 @@ const styles = StyleSheet.create({
 		marginBottom: 13,
 		marginHorizontal: 14,
 		paddingHorizontal: 10,
-	}
+	},
+	searchContainer: {
+		backgroundColor: "#D9D9D9",
+		borderRadius: 20,
+		paddingHorizontal: 10,
+		marginHorizontal: 20,
+		marginBottom: 24,
+		flexDirection: 'row',
+		flexWrap: 'nowrap'
+	},
+	searchContainerInput: {
+		width: '90%',
+		marginVertical: 2,
+		marginHorizontal: 10
+	},
+	searchIcon: {
+		width: 23,
+		height: 30,
+		marginVertical: 5,
+	  }
 });
 export { styles, screenHeight, screenWidth }

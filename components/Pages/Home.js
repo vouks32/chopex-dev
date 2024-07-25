@@ -44,23 +44,11 @@ export default function Home() {
 
         {/* SEARCH BAR */}
         <View
-          style={{
-            backgroundColor: "#D9D9D9",
-            borderRadius: 20,
-            paddingHorizontal: 10,
-            marginBottom: 24,
-            marginHorizontal: 20,
-            flexDirection: 'row',
-            flexWrap: 'nowrap'
-          }}>
+          style={styles.searchContainer}>
           <Image
             source={search}
             resizeMode={"contain"}
-            style={{
-              width: 23,
-              height: 30,
-              marginVertical: 5,
-            }}
+            style={styles.searchIcon}
           />
           <TextInput style={{ width: '90%', marginVertical: 2, marginHorizontal: 10 }}></TextInput>
         </View>
