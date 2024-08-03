@@ -6,12 +6,18 @@ let screenHeight = Dimensions.get('screen').height;
 const styles = StyleSheet.create({
 	viewport: {
 		flex: 1,
+		backgroundColor : '#FFFFFF'
 	},
 	defaultScollView: {
 		flex: 1,
 		backgroundColor: "#FFFFFF",
-		paddingTop: 40,
-		paddingBottom: 188,
+		paddingTop: 25,
+		paddingBottom: 30,
+	},
+	errorBox:{
+		textAlign: 'center',
+		alignItems: 'center',
+		marginTop: 10,
 	},
 	primaryButton: {
 		alignItems: 'center',
@@ -19,6 +25,7 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		paddingVertical: 21,
 		marginHorizontal: 37,
+		alignContent: 'center'
 	},
 	primaryButtonText: {
 		color: '#07450D',
@@ -51,6 +58,25 @@ const styles = StyleSheet.create({
 		marginBottom: 6,
 		textAlign: "center"
 	},
+	backButton : { 
+		alignItems: "center", 
+		width: 35, 
+		flex : 1,
+		backgroundColor: "#D2D2D2", 
+		borderRadius: 50, 
+		aspectRatio: 1, 
+		flexDirection: 'row', 
+		justifyContent: 'center',
+		zIndex: 80,
+		position: 'absolute',
+		top: 10,
+		left : 20
+	},
+	backButtonIcon: { 
+		color: "#000000", 
+		fontSize: 20, 
+		fontWeight: "bold", 
+	},
 	textInput: {
 		height: 50,
 		backgroundColor: "#7AEC6733",
@@ -79,6 +105,27 @@ const styles = StyleSheet.create({
 		width: 23,
 		height: 30,
 		marginVertical: 5,
+	  },
+	  eventContainer: {
+		borderColor: "#00000015",
+		borderWidth: 1,
+		paddingVertical: 10,
+		paddingHorizontal: 19,
+		marginBottom: 10,
+		width: screenWidth
+	  },
+	  eventContainerImage: {
+		borderRadius: 20,
+		height: 170,
+		marginBottom: 10,
+	  },
+	  eventContainerTitle : { color: "#000000", fontSize: 16, fontWeight: "bold", },
+	  eventContainerSubTitle : { color: "#00000090", fontSize: 12, fontWeight: "bold", },
+	  eventContainerPriceTag: { alignItems: "center", backgroundColor: "#D2D2D2", padding: 10, borderRadius: 50 },
+	  eventContainerPriceText: {
+		color: "#000000",
+		fontSize: 13,
+		fontWeight: "bold",
 	  }
 });
 export { styles, screenHeight, screenWidth }

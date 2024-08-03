@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, router } from 'expo-router';
-import { Image, View, Text, ScrollView, TouchableOpacity, TextInput, ImageBackground } from 'react-native';
+import { Image, View, Text, ScrollView, TouchableOpacity, TextInput, ImageBackground, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { styles, screenWidth, screenHeight } from '../Style';
 import { wallet, search } from '../defaults/images';
+import { GetRestaurantsLocal } from '../firestore/restaurants';
 
-export default function Home() {
+export default function Home({ navigation: { navigate } }) {
+
+  const [restaurants, setRetaurants] = useState([]);
+
+  if (restaurants.length == 0)
+    GetRestaurantsLocal().then(_restaurants => {
+      setRetaurants(_restaurants)
+    })
+
   // 2. Use at the root of your app
   return (
     <SafeAreaView
@@ -44,7 +53,7 @@ export default function Home() {
 
         {/* SEARCH BAR */}
         <View
-          style={styles.searchContainer}>
+          style={styles.searchContainer} onTouchEnd={() => { navigate('Search') }}>
           <Image
             source={search}
             resizeMode={"contain"}
@@ -55,169 +64,166 @@ export default function Home() {
 
         {/* CATEGORY SCROLLVIEW */}
         <ScrollView
-          horizontal
-          style={{ flexDirection: "row", marginBottom: 25, marginHorizontal: 0, paddingHorizontal: 10 }}>
-          <View style={{ padding: 35, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5 }}>
+          horizontal onTouchEnd={() => { navigate('CategoryDetail') }}
+          style={{ flexDirection: "row", marginBottom: 25, marginHorizontal: 0, paddingHorizontal: 20 }}>
+          <View style={{ width: screenWidth * 0.25, aspectRatio: 1, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5 }}>
           </View>
-          <View style={{ padding: 35, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5 }}>
+          <View style={{ width: screenWidth * 0.25, aspectRatio: 1, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5 }}>
           </View>
-          <View style={{ padding: 35, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5 }}>
+          <View style={{ width: screenWidth * 0.25, aspectRatio: 1, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5 }}>
           </View>
-          <View style={{ padding: 35, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5 }}>
+          <View style={{ width: screenWidth * 0.25, aspectRatio: 1, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5 }}>
           </View>
-          <View style={{ padding: 35, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5 }}>
+          <View style={{ width: screenWidth * 0.25, aspectRatio: 1, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5 }}>
           </View>
-          <View style={{ padding: 35, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5 }}>
+          <View style={{ width: screenWidth * 0.25, aspectRatio: 1, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5 }}>
           </View>
         </ScrollView>
 
         {/* RESTAURANT SCROLLVIEW */}
-        <ScrollView
-          horizontal
-          style={{
-            marginBottom: 7,
-            paddingHorizontal: 17,
-          }}>
-          <Text
-            style={{
-              color: "#000000",
-              fontSize: 16,
-              fontWeight: "bold",
-            }}>
-            {"Restaurants proches"}
-          </Text>
+        <View style={{ marginBottom: 7, paddingHorizontal: 17, flexDirection: 'row' }}>
+          <Text style={{ color: "#000000", fontSize: 16, fontWeight: "bold" }}> {"Restaurants "} </Text>
+          <Text style={{ color: "#000000", fontSize: 16, fontWeight: "bold", }}> {"→"} </Text>
+        </View>
 
-          <Text
-            style={{
-              color: "#000000",
-              fontSize: 16,
-              fontWeight: "bold",
-            }}>
-            {"→"}
-          </Text>
-        </ScrollView>
-
-        <ScrollView horizontal style={{ flexDirection: "row", marginBottom: 25, marginHorizontal: 0, paddingHorizontal: 10 }}>
-          <View style={{ width: screenWidth / 4, paddingHorizontal: 5 }}>
-            <View style={{ width: "100%", aspectRatio: 1, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5, marginHorizontal: 5 }}></View>
-            <Text style={{ textAlign: "center" }}>Nom du resto</Text>
-          </View>
-          <View style={{ width: screenWidth / 4, paddingHorizontal: 5 }}>
-            <View style={{ width: "100%", aspectRatio: 1, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5, marginHorizontal: 5 }}></View>
-            <Text style={{ textAlign: "center" }}>Nom du resto</Text>
-          </View>
-          <View style={{ width: screenWidth / 4, paddingHorizontal: 5 }}>
-            <View style={{ width: "100%", aspectRatio: 1, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5, marginHorizontal: 5 }}></View>
-            <Text style={{ textAlign: "center" }}>Nom du resto</Text>
-          </View>
-        </ScrollView>
-
-        <View
-          style={{
-            borderColor: "#00000015",
-            borderWidth: 1,
-            paddingVertical: 20,
-            paddingHorizontal: 19,
-            marginBottom: 9,
-          }}>
-          <Image
-            source={{ uri: "https://media.istockphoto.com/id/1829241109/photo/enjoying-a-brunch-together.jpg?b=1&s=612x612&w=0&k=20&c=Mn_EPBAGwtzh5K6VyfDmd7Q5eJFXSHhGWVr3T4WDQRo=" }}
-            resizeMode={"cover"}
-            style={{
-              borderRadius: 20,
-              height: 170,
-              marginBottom: 10,
-            }}
+        <ScrollView horizontal style={{ flexDirection: "row", marginBottom: 25, marginHorizontal: 0, paddingHorizontal: 20 }}>
+          <FlatList
+            data={restaurants}
+            renderItem={(item) => (
+              <View 
+              onTouchEnd={() => { navigate('RestaurantDetail', {restaurant : item.item}) }}
+              style={{ width: screenWidth * 0.25, marginHorizontal: 5 }}>
+                <View style={{ width: "100%", aspectRatio: 1, backgroundColor: "#D2D2D2", borderRadius: 50, overflow: 'hidden' }}>
+                  <Image
+                    source={{ uri: item.item.logo_image }}
+                    resizeMode={"cover"}
+                    style={{ width: "100%", aspectRatio: 1 }}
+                  />
+                </View>
+                <Text style={{ textAlign: "center", fontWeight: 'bold' }}>{item.item.name}</Text>
+              </View>
+            )}
+            keyExtractor={item => item.id}
+            contentContainerStyle={{ flexDirection: 'row' }}
           />
-          <View style={{ flexDirection: "row", alignItems: "center", }}>
+        </ScrollView>
 
-            <View style={{ flex: 1, marginRight: 4, }}>
-              <Text style={{ color: "#000000", fontSize: 16, fontWeight: "bold", }}>
-                {"-50% chez MAMIE BEIGNETS !"}
-              </Text>
-              <Text style={{ color: "#000000", fontSize: 12, fontWeight: "bold", }}>
-                {"0Frs Delivery fee  ▪  10 - 20 min"}
-              </Text>
-            </View>
+        {/*Events*/}
+        <ScrollView horizontal >
+          <FlatList
+            data={restaurants}
+            renderItem={(item) => (
+              <FlatList
+                data={item.item.events}
+                renderItem={(eventsItem) => (
+                  <View
+                  onTouchEnd={() => { navigate('EventDetail', { restaurant: item.item, event :  eventsItem.item}) }}
+                    style={styles.eventContainer}>
 
-            <View
-              style={{
-                alignItems: "center",
-                backgroundColor: "#D2D2D2",
-                padding: 10,
-                borderRadius: 50
-              }}
-            >
-              <Text
-                style={{
-                  color: "#000000",
-                  fontSize: 13,
-                  fontWeight: "bold",
-                }}>
-                {"4.3"}
-              </Text>
-            </View>
+                    <Image
+                      source={{ uri: eventsItem.item.image }}
+                      resizeMode={"cover"}
+                      style={styles.eventContainerImage}
+                    />
+                    <View style={{ flexDirection: "row", alignItems: "center", }}>
+                      <View style={{ flex: 1, marginRight: 4, }}>
+                        <Text style={styles.eventContainerTitle}>
+                          {eventsItem.item.name.toUpperCase()}
+                        </Text>
+                        <Text style={styles.eventContainerSubTitle}>
+                          {"Se termine : " + (ConvertDateToFrench(eventsItem.item.date_of_end))}
+                        </Text>
+                      </View>
+                      <View style={styles.eventContainerPriceTag}>
+                        <Text style={styles.eventContainerPriceText}>
+                          {"-" + eventsItem.item.dish[0].reduction + "%"}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                )}
+                keyExtractor={item => item.name}
+                contentContainerStyle={{ flexDirection: 'row' }}
+              />
+            )}
+            keyExtractor={item => item.id}
+            contentContainerStyle={{ flexDirection: 'row' }}
+          />
+        </ScrollView>
 
-          </View>
-        </View>
-
-        <View
-          style={{
-            marginBottom: 7,
-            paddingHorizontal: 17,
-          }}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}>
-            <Text
-              style={{
-                color: "#000000",
-                fontSize: 16,
-                fontWeight: "bold",
-              }}>
-              {"Restaurants proches"}
-            </Text>
-            <Text
-              style={{
-                color: "#000000",
-                fontSize: 16,
-                fontWeight: "bold",
-              }}>
-              {"→"}
-            </Text>
+        {/** Near restaurants */}
+        <View style={{ marginBottom: 7, paddingHorizontal: 17, }}>
+          <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", }}>
+            <Text style={{  color: "#000000", fontSize: 16,  fontWeight: "bold",}}> {"Restaurants proches"} </Text>
+            <Text style={{ color: "#000000", fontSize: 16, fontWeight: "bold", }}> {"→"}  </Text>
           </View>
 
           <Text
-            style={{
-              color: "#000000",
-              fontSize: 13,
-              fontWeight: "bold",
-            }}>
-            {"Menu de la force du poulet"}
+            style={styles.eventContainerSubTitle}>
+            {"Économisez en frais de livraison"}
           </Text>
         </View>
 
-        <View >
-          <View
-            style={{
-              paddingHorizontal: 20,
-            }}>
-            <Image
-              source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-              resizeMode={"stretch"}
-              style={{
-                borderRadius: 10,
-                height: 170,
-                marginTop: 0,
-              }}
-            />
-          </View>
-        </View>
+        <ScrollView horizontal onTouchEnd={() => { navigate('RestaurantDetail') }}>
+        <FlatList
+            data={restaurants}
+            renderItem={(item) => (
+              <View
+                  onTouchEnd={() => { navigate('RestaurantDetail', { restaurant: item.item }) }}
+                    style={styles.eventContainer}>
 
+                    <Image
+                      source={{ uri: item.item.cover_image }}
+                      resizeMode={"cover"}
+                      style={styles.eventContainerImage}
+                    />
+                    <View style={{ flexDirection: "row", alignItems: "center", }}>
+                      <View style={{ flex: 1, marginRight: 4, }}>
+                        <Text style={styles.eventContainerTitle}>
+                          {item.item.name.toUpperCase()}
+                        </Text>
+                        <Text style={styles.eventContainerSubTitle}>
+                          {item.item.description}
+                        </Text>
+                      </View>
+                      <View style={styles.eventContainerPriceTag}>
+                        <Text style={styles.eventContainerPriceText}>
+                          {"-%"}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+            )}
+            keyExtractor={item => item.id}
+            contentContainerStyle={{ flexDirection: 'row' }}
+          />
+        </ScrollView>
+
+
+        <View style={{ marginTop: 50 }}></View>
       </ScrollView>
     </SafeAreaView>
   );
+}
+
+function ConvertDateToFrench(timestamp) {
+  const mois = ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"]
+
+  function frenchTodayDate(date) {
+    let today = new Date(date);
+    let year = today.getFullYear()
+    let dayNumber = today.getDate()
+    let month = mois[today.getMonth()]
+    let weekday = today.toLocaleDateString("fr-FR", { weekday: "long" });
+
+    return { weekday, dayNumber, month, year }
+  }
+
+  //=> { weekday: 'mercredi', dayNumber: 12, month: 'octobre', year: 2022 }
+
+  /*So let's say you want to print date according tothe french languages rules*/
+  const capitalize = ([first, ...rest]) => first.toUpperCase() + rest.join('').toLowerCase();
+  const { weekday, dayNumber, month, year } = frenchTodayDate(parseInt(timestamp))
+  const aujourdhui = `${capitalize(weekday)}, le ${dayNumber} ${month} ${year}`
+  return aujourdhui
 }
