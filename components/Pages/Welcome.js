@@ -14,8 +14,9 @@ export default function Welcome({ navigation: { navigate } }) {
 
   //AsyncStorage.clear()
   getProfilLocal().then(prof => {
-    if (prof != null)
+    if (prof != null){
       setDestination('Home')
+    }
   })
 
   GetRestaurants(() => {
@@ -26,8 +27,6 @@ export default function Welcome({ navigation: { navigate } }) {
     else
       console.log("Connection error?")
   })
-
-  let Profil = getProfilLocal();
 
   // 2. Use at the root of your app
   return (
