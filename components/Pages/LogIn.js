@@ -3,19 +3,19 @@ import { Link, router, useNavigation } from 'expo-router';
 import { Image, View, Text, ScrollView, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { styles, screenWidth, screenHeight } from '../Style';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+//import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SmallModal } from '../Sections/modal';
 import { LoginInProfil } from '../firestore/profil';
 
 export default function LogIn({ navigation: { navigate } }) {
 
   // if the user already have a profil saved locally no need to login
-  AsyncStorage.getItem('Profil').then((profiltext) => {
+ /* AsyncStorage.getItem('Profil').then((profiltext) => {
     let profil = JSON.parse(profiltext)
     if (profil) {
       router.replace('../home')
     }
-  })
+  })*/
 
   const [mail, setMail] = useState('');
   const [phoneNumber, setNumber] = useState('');

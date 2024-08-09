@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, router } from 'expo-router';
 import { Image, View, Text, ScrollView, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+//import AsyncStorage from '@react-native-async-storage/async-storage'
 import { styles, screenWidth, screenHeight } from '../Style';
 import { SignInProfil } from '../firestore/profil';
 import { SmallModal } from '../Sections/modal';
@@ -10,12 +10,12 @@ import { SmallModal } from '../Sections/modal';
 export default function SignUp({ navigation: { navigate } }) {
 
   // if the user already have a profil saved locally no need to signin
-  AsyncStorage.getItem('Profil').then((profiltext) => {
+  /*AsyncStorage.getItem('Profil').then((profiltext) => {
     let profil = JSON.parse(profiltext)
     if (profil) {
       navigate('Home')
     }
-  })
+  })*/
 
   const [name, setName] = useState('');
   const [mail, setMail] = useState('');

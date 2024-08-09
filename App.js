@@ -12,6 +12,7 @@ import LogIn from './components/Pages/LogIn.js';
 
 import Home from './components/Pages/Home.js';
 import Search from './components/Pages/Search.js';
+import Basket from './components/Pages/Basket.js';
 import CategoryDetail from './components/Pages/CategoryDetail.js';
 import RestaurantDetail from './components/Pages/RestaurantDetail.js';
 import EventDetail from './components/Pages/EventDetails.js';
@@ -31,6 +32,7 @@ function App() {
 
         <Stack.Screen name="Home" component={Home} options={{headerShown : false}}/>
         <Stack.Screen name="Search" component={Search} options={{headerShown : false}}/>
+        <Stack.Screen name="Basket" component={Basket} options={{headerShown : false}}/>
         <Stack.Screen name="CategoryDetail" component={CategoryDetail} options={{headerShown : false}}/>
         <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} options={{headerShown : false}}/>
         <Stack.Screen name="EventDetail" component={EventDetail} options={{headerShown : false}}/>

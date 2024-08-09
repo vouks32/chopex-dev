@@ -4,7 +4,7 @@ import { Image, View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { styles, screenWidth, screenHeight } from '../Style';
 import { welcome } from '../defaults/images';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+//import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GetRestaurants } from '../firestore/restaurants';
 import { getProfilLocal } from '../firestore/profil';
 

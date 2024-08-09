@@ -55,7 +55,7 @@ export default function Search({ navigation: { navigate, goBack } }) {
           </View>
         </View>
 
-        {/** Liste of Categories */}
+        {/** Liste of Categories 
         <ScrollView
           onTouchEnd={() => { navigate('CategoryDetail') }}
           horizontal
@@ -73,9 +73,9 @@ export default function Search({ navigation: { navigate, goBack } }) {
           <View style={{ padding: 35, backgroundColor: "#D2D2D2", borderRadius: 50, marginHorizontal: 5 }}>
           </View>
         </ScrollView>
-
+*/}
         {/** Liste of Results */}
-        <View onTouchEnd={() => { navigate('FoodDetail') }}>
+        <View onTouchEnd={() => { /*navigate('FoodDetail')*/ }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, alignItems: 'stretch' }}>
             <View style={{ width: "70%" }}>
               <Text style={{ backgroundColor: "#D2D2D2", marginVertical: 5 }}></Text>
