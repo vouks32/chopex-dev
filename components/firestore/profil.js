@@ -13,7 +13,7 @@ const SignInProfil = async (name, mail, number, password, _callback, _errorCallb
     let profil = {
         name: name,
         mail: mail.toLowerCase(),
-        number: "237"+number,
+        number: "237" + number,
         password: password,
         isMailValidated: false,
         date_created: Math.round(new Date().getTime() / 1000),
@@ -55,7 +55,7 @@ const SignInProfil = async (name, mail, number, password, _callback, _errorCallb
             return;
         }
         console.log("Existing Profil =>", existingprofil)
-        
+
         // USER DOESN'T EXIST SO SIGN IN
         const docRef = await addDoc(collection(db, "Col_Profils_Clients"), profil);
         profil.id = docRef.id;
@@ -93,7 +93,7 @@ const LoginInProfil = async (mail, number, password, _callback, _errorCallback) 
                 await AsyncStorage.setItem('Profil', JSON.stringify(existingprofil[0]))
                 _callback();
             } else {
-                _errorCallback(true, (number != '')? true : false)
+                _errorCallback(true, (number != '') ? true : false)
             }
         } else {
             _errorCallback(false);
@@ -114,3 +114,32 @@ function getProfilErrorState() {
 }
 
 export { getProfilCollection, getProfilLocal, getProfilErrorState, SignInProfil, LoginInProfil }
+
+/*
+
+User Profil Object :
+{
+        name: string,
+        mail: string,
+        number: string,
+        password: string,
+        isMailValidated: boolean,
+        date_created: int,
+        orders: [
+        { order_id : string }
+        ],
+        wallet: {
+            transactions: [
+             {
+               transaction_id: string,
+               from : string, // momo: when added to his wallet from mobile money, chopex: when added from the app to his wallet (refund)
+               to : string, // wallet: when money is added to the wallet (funding wallet or refund), chopex: when sending to the app (buying an order)
+               amount: int,
+             }
+            ],
+            balance: 0,
+            mobileMoneyNumbers: [string]
+        }
+    }
+
+*/

@@ -157,11 +157,26 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 22,
-        backgroundColor: '#E2E2E280'
+        backgroundColor: '#E2E2E2AA'
+    },
+    textInput: {
+        height: 50,
+        backgroundColor: "#7AEC6733",
+        borderColor: "#07450D",
+        borderRadius: 10,
+        borderWidth: 1,
+        marginBottom: 13,
+        marginHorizontal: 14,
+        paddingHorizontal: 10,
+    },
+    backModalCloser: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
     },
     modalView: {
-        margin: 20,
         backgroundColor: 'white',
         borderRadius: 20,
         width: screenWidth * 0.9,
@@ -174,6 +189,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+        zIndex: 10
     },
     button: {
         borderRadius: 20,
@@ -223,11 +239,70 @@ const styles = StyleSheet.create({
 
     },
     modalTextTitle: {
-        marginBottom: 5,
+        marginBottom: 10,
         fontSize: 24,
         textAlign: 'center',
         fontWeight: 'bold'
     },
 });
 
-export { SmallModal, OrderModal }
+const WalletModal = ({ setVisible = false, onModalClosed }) => {
+    const [modalVisible, setModalVisible] = useState(setVisible);
+
+    return (
+        <Modal
+            animationType="fade"
+            visible={modalVisible}
+            transparent
+            onRequestClose={() => {
+                setModalVisible(!modalVisible);
+            }}
+        >
+            <View style={styles.centeredView} >
+                <View style={styles.backModalCloser} onTouchEnd={() => { setModalVisible(!modalVisible); onModalClosed() }}></View>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalTextTitle}>Ajouter des Fonds</Text>
+
+                    <TextInput style={styles.textInput} placeholder='Numéro Mobile Money' onChangeText={newText => setName(newText)}></TextInput>
+                    <TextInput style={styles.textInput} placeholder='Montant en FCFA' onChangeText={newText => setName(newText)}></TextInput>
+
+                    <View style={{ paddingHorizontal: 5, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                        <Pressable
+                            style={[styles.primaryButton, { paddingVertical: 5, paddingHorizontal: 15, marginHorizontal: 1 }]}
+                            onPress={() => {
+                                setModalVisible(!modalVisible);
+                                onModalClosed()
+                            }}>
+                            <Text style={[styles.primaryButtonText, { fontSize: 14 }]}>1,000Frs</Text>
+                        </Pressable>
+                        <Pressable
+                            style={[styles.primaryButton, { paddingVertical: 5, paddingHorizontal: 15, marginHorizontal: 1 }]}
+                            onPress={() => {
+
+                            }}>
+                            <Text style={[styles.primaryButtonText, { fontSize: 14 }]}>5,000Frs</Text>
+                        </Pressable>
+                        <Pressable
+                            style={[styles.primaryButton, { paddingVertical: 5, paddingHorizontal: 15, marginHorizontal: 1 }]}
+                            onPress={() => {
+                                setModalVisible(!modalVisible);
+                                onModalClosed()
+                            }}>
+                            <Text style={[styles.primaryButtonText, { fontSize: 14 }]}>20,000Frs</Text>
+                        </Pressable>
+                    </View>
+
+                    <Pressable
+                        style={[styles.primaryButton, { marginTop: 10, paddingVertical: 15, marginHorizontal: 5 }]}
+                        onPress={() => {
+                            setModalVisible(!modalVisible);
+                            onModalClosed()
+                        }}>
+                        <Text style={styles.primaryButtonText}>Ajouter Les Fonds</Text>
+                    </Pressable>
+                </View>
+            </View>
+        </Modal>
+    );
+}
+export { SmallModal, OrderModal, WalletModal }

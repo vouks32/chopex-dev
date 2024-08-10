@@ -122,7 +122,7 @@ export default function SignUp({ navigation: { navigate } }) {
             marginHorizontal: 14,
           }}>
         </View>
-
+        {/** 
         <TouchableOpacity
           style={styles.secondaryButton}>
           <Text
@@ -136,7 +136,7 @@ export default function SignUp({ navigation: { navigate } }) {
             style={styles.secondaryButtonText}>
             {"Continnuer avec Apple"}
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity>*/}
         <TouchableOpacity
           style={styles.tertiaryButton}
           onPressOut={() => { navigate('LogIn') }}>

@@ -11,8 +11,8 @@ const styles = StyleSheet.create({
 	defaultScollView: {
 		flex: 1,
 		backgroundColor: "#FFFFFF",
-		paddingTop: 25,
 		paddingBottom: 30,
+		paddingTop: 10,
 	},
 	errorBox: {
 		textAlign: 'center',

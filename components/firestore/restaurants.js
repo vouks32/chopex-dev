@@ -47,3 +47,68 @@ const GetRestaurantsLocal = async ()=>{
 
 
 export { GetRestaurants, GetRestaurantsLocal }
+
+/**
+ * 
+ * Restaurant profil JSON
+ * {
+      "localisation": {
+        "lon": float,
+        "lat": float
+      },
+      "name": string,
+      "locality": string,
+      "description": string,
+      "cover_image": string,
+      "creation_date": 1684275200,
+      "logo_image": string,
+      "events": [
+        {
+          "image": string,
+          "date_of_end": int,
+          "dish": [ 
+            {
+              "dish_id": string,
+              "reduction_type": string, // "pourcentage" : for now it is the only option, reduce the dish price by a percent of its price
+              "reduction": int
+            }
+          ],
+          "name": string,
+          "date_of_start": int,
+          "description": string
+        }
+      ],
+      "dish": [
+        {
+          "id": string,
+          "image": string,
+          "categorys": [string],
+          "reviews": [
+            {
+              "date": int,
+              "note": int, // 1 to 5
+              "comment": string,
+              "profils_ID": string
+            }
+          ],
+          "complements": [
+            {
+              "image": string,
+              "price": int,
+              "name": string
+            }
+          ],
+          "name": string,
+          "variantes": [
+            {
+              "image": string",
+              "name": string
+            }
+          ],
+          "initial_price": int,
+          "description": string
+        }
+      ]
+    }
+ * 
+ */

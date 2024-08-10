@@ -3,7 +3,6 @@ import { Link, router } from 'expo-router';
 import { Image, View, Text, ScrollView, TouchableOpacity, Easing, ImageBackground, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { styles, screenWidth, screenHeight } from '../Style';
-import OrderModal from '../Sections/modal';
 import { getProfilLocal } from '../firestore/profil';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BasketButton } from '../Sections/basket';
@@ -13,12 +12,14 @@ import { sparks } from '../defaults/images';
 const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
 
 export default function FoodDetail({ route, navigation: { navigate, goBack, reload } }) {
-  //AsyncStorage.removeItem('Basket')
+
+  //AsyncStorage.removeItem('Basket') // au cas ou il te faut supprimer le basket en local
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [_animated, setAnimated] = useState(false);
   const [newBasketLength, setNewBasketLength] = useState(0);
   let animationProgress = useRef(new Animated.Value(0));
 
+  // Play de spaks animation
   const playLottie = () => {
     Animated.timing(animationProgress.current, {
       toValue: 1,
@@ -30,8 +31,9 @@ export default function FoodDetail({ route, navigation: { navigate, goBack, relo
     });
   };
 
+  // Play the appearance animation of the 'Voir le panier' button
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const fadeIn = () => {
+  const AppearIn = () => {
     // Will change fadeAnim value to 1 in 5 seconds
     Animated.timing(fadeAnim, {
       toValue: -125,
@@ -40,6 +42,7 @@ export default function FoodDetail({ route, navigation: { navigate, goBack, relo
     }).start();
   };
 
+  // Get the local profil information and get the local basket information with orders
   const { restaurant, dish, event, event_dish } = route.params;
   const [profil, setProfil] = useState(null);
   if (profil == null) {
@@ -48,6 +51,7 @@ export default function FoodDetail({ route, navigation: { navigate, goBack, relo
         _basket = JSON.parse(_basket)
       else
         _basket = []
+      // Refreshes the page and tells the basket icon to update it's number of orders
       setNewBasketLength(_basket.length)
     });
     getProfilLocal().then(prof => {
@@ -55,6 +59,7 @@ export default function FoodDetail({ route, navigation: { navigate, goBack, relo
     })
   }
 
+  //Template of an order as saved locally
   let orderTemplate = {
     id: 0,
     dish: dish,
@@ -80,7 +85,7 @@ export default function FoodDetail({ route, navigation: { navigate, goBack, relo
   }
   const [order, setOrder] = useState(orderTemplate);
 
-
+// When a complement is selected this funtion is triggered to update the order object
   const setOrderComplements = (complement) => {
     let hasBeenAdded = -1;
     order.complements.forEach((_complement, index) => {
@@ -98,12 +103,14 @@ export default function FoodDetail({ route, navigation: { navigate, goBack, relo
     }
   }
 
+// When a variant is selected this funtion is triggered to update the order object
   const setOrderVariant = (variante) => {
     orderTemplate = { ...order };
     orderTemplate.dish_variant = variante
     setOrder(orderTemplate)
   }
 
+// When the order is added to the basket
   const makeOrder = async () => {
     orderTemplate = { ...order };
     orderTemplate.id = Date.now() + "-" + profil.id;
@@ -144,13 +151,32 @@ export default function FoodDetail({ route, navigation: { navigate, goBack, relo
       console.log("Food detail page basket lentgh", _basket.length)
       if (!_animated) {
         setAnimated(true)
-        fadeIn()
+        AppearIn()
       }
       playLottie()
       setNewBasketLength(_basket.length)
     })
 
   }
+
+  /**
+   *  
+   * Add function(s) to save these actions : open this page, placed an order
+   * 
+   * for each action:
+   * - retrieve the array of already saved actions in AsyncStorage if existed else set an empty array
+   * - add the object of the action in the array in this format:
+   * {
+   *   action_type : string, // 'view_page' or 'placed_order'
+   *   date : int, // gotten from Date.now()
+   *   dish_id: int, // gotten from dish.id
+   *   restaurant_id: int, // gotten from restaurant.id
+   *   categorys : [string], //  gotten from dish.categorys
+   * }
+   * 
+   * - Save Locally
+   * 
+   */
 
   return (
     <SafeAreaView
@@ -330,7 +356,6 @@ export default function FoodDetail({ route, navigation: { navigate, goBack, relo
 
         <View style={{ marginBottom: 150 }}></View>
 
-        {isModalVisible ? <OrderModal setVisible={isModalVisible} onModalClosed={() => { setIsModalVisible(false) }} /> : <></>}
 
       </ScrollView>
 

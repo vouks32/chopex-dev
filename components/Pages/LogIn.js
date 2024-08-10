@@ -10,12 +10,12 @@ import { LoginInProfil } from '../firestore/profil';
 export default function LogIn({ navigation: { navigate } }) {
 
   // if the user already have a profil saved locally no need to login
- /* AsyncStorage.getItem('Profil').then((profiltext) => {
-    let profil = JSON.parse(profiltext)
-    if (profil) {
-      router.replace('../home')
-    }
-  })*/
+  /* AsyncStorage.getItem('Profil').then((profiltext) => {
+     let profil = JSON.parse(profiltext)
+     if (profil) {
+       router.replace('../home')
+     }
+   })*/
 
   const [mail, setMail] = useState('');
   const [phoneNumber, setNumber] = useState('');
@@ -99,18 +99,18 @@ export default function LogIn({ navigation: { navigate } }) {
         <TextInput
           style={styles.textInput}
           placeholder='Adresse Mail / Numéro de Téléphone'
-          onChangeText={newText => setidentifier(newText)} 
+          onChangeText={newText => setidentifier(newText)}
         >
         </TextInput>
         <TextInput
           style={styles.textInput}
           placeholder='Mot de passe'
-          onChangeText={newText => setPassword(newText)} 
+          onChangeText={newText => setPassword(newText)}
         >
         </TextInput>
         <TouchableOpacity
           style={styles.primaryButton}
-          onPressOut={() => { SignUp()}}>
+          onPressOut={() => { SignUp() }}>
           {!isLoading ?
             <Text style={styles.primaryButtonText}>CONTINUER</Text>
             :
@@ -119,8 +119,8 @@ export default function LogIn({ navigation: { navigate } }) {
         </TouchableOpacity>
 
         {isError ?
-            <View style={styles.errorBox}><Text>{isError}</Text></View>
-            : <></>
+          <View style={styles.errorBox}><Text>{isError}</Text></View>
+          : <></>
         }
 
         <View
@@ -131,7 +131,7 @@ export default function LogIn({ navigation: { navigate } }) {
             marginHorizontal: 14,
           }}>
         </View>
-
+        {/**
         <TouchableOpacity
           style={styles.secondaryButton}
           onPressOut={() => { navigate('Home') }}>
@@ -148,7 +148,7 @@ export default function LogIn({ navigation: { navigate } }) {
             {"Continnuer avec Apple"}
           </Text>
         </TouchableOpacity>
-
+ */}
         <TouchableOpacity
           style={styles.tertiaryButton}
           onPressOut={() => { navigate('SignUp') }}>
@@ -164,7 +164,7 @@ export default function LogIn({ navigation: { navigate } }) {
           </View>
         </TouchableOpacity>
 
-        <SmallModal enable={modal.enable} text={modal.text} yesButton={modal.yes} noButton={modal.no} yesAction={modal.yesAction} noAction={modal.noAction}/>
+        <SmallModal enable={modal.enable} text={modal.text} yesButton={modal.yes} noButton={modal.no} yesAction={modal.yesAction} noAction={modal.noAction} />
 
       </ScrollView>
     </SafeAreaView>
@@ -174,8 +174,8 @@ export default function LogIn({ navigation: { navigate } }) {
 
 const validateEmail = (email) => {
   return String(email)
-      .toLowerCase()
-      .match(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
 };
