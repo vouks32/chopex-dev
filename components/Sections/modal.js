@@ -3,6 +3,10 @@ import { Link, router } from 'expo-router';
 import { Image, View, Text, ScrollView, TouchableOpacity, TextInput, ImageBackground, Modal, Pressable, StyleSheet, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { screenWidth, screenHeight } from '../Style';
+import { Dropdown } from 'react-native-element-dropdown';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { getProfilLocal } from '../firestore/profil';
+
 
 
 const SmallModal = ({ enable, text, yesButton, noButton, yesAction, noAction }) => {
@@ -91,58 +95,117 @@ const _styles = StyleSheet.create({
 });
 
 
-const OrderModal = ({ setVisible = false, onModalClosed }) => {
-    const [modalVisible, setModalVisible] = useState(setVisible);
+const OrderModal = ({ modalVisible = null, modalInfo, onModalClosed }) => {
 
+    let TotalPrice = 0;
+    let Nombre_de_plat = 0;
+    modalInfo.orders.forEach(_order => {
+        TotalPrice += _order.order_price.total_price;
+        Nombre_de_plat++;
+    });
+
+    const [value, setValue] = useState(null);
+    const [isFocus, setIsFocus] = useState(false);
+    const [profil, setProfil] = useState(false);
+    const [pdlData, setpdlData] = useState([]);
+    const data = [];
+
+    if (!profil) {
+        getProfilLocal().then((prof) => {
+            setProfil(prof)
+            console.log(prof.points_de_livraisons)
+            prof.points_de_livraisons.forEach((pdl, index) => {
+                data.push({
+                    'id': index,
+                    'name': pdl.name,
+                    'quater': pdl.quater,
+                    'localisation': pdl.localisation.lat + "," + pdl.localisation.lon
+                })
+            })
+            setpdlData(data)
+        })
+    }
+    const renderLabel = () => {
+        if (value || isFocus) {
+            return (
+                <Text style={[styles.label, isFocus && { color: 'blue' }]}>
+                    Dropdown label
+                </Text>
+            );
+        }
+        return null;
+    };
     return (
         <Modal
             animationType="fade"
             visible={modalVisible}
             transparent
             onRequestClose={() => {
-                setModalVisible(!modalVisible);
+                onModalClosed();
             }}
         >
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                     <Text style={styles.modalTextTitle}>Résumé de la Commande</Text>
+                    <Text style={styles.modalText}>Restaurant:</Text>
+                    <Text style={[styles.modalText, { fontWeight: 'bold', marginTop: 0 }]}>{modalInfo.restaurant.name}</Text>
+                    <Text style={styles.modalText}>Nombre de plats:</Text>
+                    <Text style={[styles.modalText, { fontWeight: 'bold', marginTop: 0 }]}>{Nombre_de_plat} Plat(s)</Text>
+                    <Text style={styles.modalText}>Total:</Text>
+                    <Text style={[styles.modalText, { fontWeight: 'bold', marginTop: 0 }]}>{TotalPrice + 1000} frs</Text>
 
-                    <View style={{ flexDirection: 'row', width: "100%", justifyContent: 'space-between', marginTop: 20 }}>
-                        <View style={{ width: "50%", paddingTop: 10 }}>
-                            <View style={{ backgroundColor: "#D2D2D2", width: "80%", aspectRatio: 1, borderRadius: 20 }}></View>
-                            <Text style={[styles.modalTextTitle, { textAlign: 'center', width: "80%" }]}>Prix Totale</Text>
-                        </View>
-                        <View style={{ width: "50%" }}>
-                            <Text style={styles.modalText}>Nom du plat</Text>
-                            <Text style={styles.modalText}>Compléments</Text>
-                            <FlatList
-                                data={[
-                                    { key: 'Complément-1' },
-                                    { key: 'Complément-2' },
-                                    { key: 'Complément-3' },
-                                ]}
-                                style={{ margin: 0, padding: 0 }}
-                                renderItem={({ item }) => <Text>{"  ● " + item.key}</Text>}
-                            />
-                        </View>
+                    <Text style={styles.modalTextTitle}>Point de Livraison</Text>
+                    <View style={styles.container}>
+                        {renderLabel()}
+                        <Dropdown
+                            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                            placeholderStyle={styles.placeholderStyle}
+                            selectedTextStyle={styles.selectedTextStyle}
+                            inputSearchStyle={styles.inputSearchStyle}
+                            search={false}
+                            iconStyle={styles.iconStyle}
+                            data={pdlData}
+                            maxHeight={300}
+                            labelField="name"
+                            valueField="id"
+                            placeholder={!isFocus ? 'Choisissez un point de livraison' : '...'}
+                            searchPlaceholder="Search..."
+                            value={value}
+                            onFocus={() => setIsFocus(true)}
+                            onBlur={() => setIsFocus(false)}
+                            onChange={item => {
+                                setValue(item.value);
+                                setIsFocus(false);
+                            }}
+                            renderLeftIcon={() => (
+                                <AntDesign
+                                    style={styles.icon}
+                                    color={isFocus ? 'blue' : 'black'}
+                                    name="Safety"
+                                    size={20}
+                                />
+                            )}
+                            renderItem={item => {
+                                return (
+                                    <View style={{padding: 10}}>
+                                        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
+                                        <Text style={{ fontSize: 14, fontWeight: 'bold', color: "#20202080"}}>{item.quater+" ("+item.localisation+")"}</Text>
+
+                                    </View>
+                                );
+                            }}
+                        />
                     </View>
-                    <Text style={[styles.modalText, { textAlign: 'center' }]}>Quantité</Text>
+
+                    
+
 
                     <Pressable
                         style={[styles.primaryButton, { marginTop: 20, paddingVertical: 15, marginHorizontal: 5 }]}
                         onPress={() => {
-                            setModalVisible(!modalVisible);
                             onModalClosed()
                         }}>
-                        <Text style={styles.primaryButtonText}>Ajouter au panier</Text>
-                    </Pressable>
-                    <Pressable
-                        style={[styles.secondaryButton, { marginTop: 10, marginBottom: 0, paddingVertical: 10, marginHorizontal: 45 }]}
-                        onPress={() => {
-                            setModalVisible(!modalVisible);
-                            onModalClosed()
-                        }}>
-                        <Text style={styles.secondaryButtonText}>Annuler</Text>
+                        <Text style={styles.primaryButtonText}>Passer Commande</Text>
                     </Pressable>
                 </View>
             </View>
@@ -234,15 +297,52 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     modalText: {
-        marginTop: 5,
+        marginTop: 10,
         fontSize: 18,
 
     },
     modalTextTitle: {
-        marginBottom: 10,
+        marginVertical: 5,
         fontSize: 24,
         textAlign: 'center',
         fontWeight: 'bold'
+    },
+    container: {
+        backgroundColor: 'white',
+        paddingVertical: 16,
+    },
+    dropdown: {
+        height: 50,
+        borderColor: 'gray',
+        borderWidth: 0.5,
+        borderRadius: 8,
+        paddingHorizontal: 8,
+    },
+    icon: {
+        marginRight: 5,
+    },
+    label: {
+        position: 'absolute',
+        backgroundColor: 'white',
+        left: 22,
+        top: 8,
+        zIndex: 999,
+        paddingHorizontal: 8,
+        fontSize: 14,
+    },
+    placeholderStyle: {
+        fontSize: 16,
+    },
+    selectedTextStyle: {
+        fontSize: 16,
+    },
+    iconStyle: {
+        width: 20,
+        height: 20,
+    },
+    inputSearchStyle: {
+        height: 40,
+        fontSize: 16,
     },
 });
 
@@ -305,4 +405,5 @@ const WalletModal = ({ setVisible = false, onModalClosed }) => {
         </Modal>
     );
 }
+
 export { SmallModal, OrderModal, WalletModal }

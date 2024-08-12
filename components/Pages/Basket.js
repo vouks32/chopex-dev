@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { Link, router } from 'expo-router';
 import { Image, View, Text, ScrollView, TouchableOpacity, TextInput, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native';
-import { wallet, search } from '../defaults/images';
-import { styles, screenWidth, screenHeight } from '../Style';
-import { BasketButton } from '../Sections/basket';
+import { wallet } from '../defaults/images';
+import { styles } from '../Style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GetRestaurantsLocal } from '../firestore/restaurants';
 import { numberWithCommas } from '../functions';
+import { OrderModal } from '../Sections/modal';
 
 export default function Basket({ navigation: { navigate, goBack } }) {
   const [orders, setOrders] = useState([])
-  const [restaurant, setRestaurant] = useState([])
+  const [orderModalInfo, setOrderModalInfo] = useState(null)
+  const [modalVisible, setModalVisible] = useState(false)
 
   const getBasketStorage = async () => {
     let basket = await AsyncStorage.getItem('Basket')
@@ -33,13 +33,9 @@ export default function Basket({ navigation: { navigate, goBack } }) {
       ordersTemp.splice(groupId, 1)
     } else {
       ordersTemp[groupId].orders.splice(itemId, 1)
-      if(ordersTemp[groupId].orders.length < 1)
+      if (ordersTemp[groupId].orders.length < 1)
         ordersTemp.splice(groupId, 1)
     }
-
-    
-
-
     AsyncStorage.setItem('Basket', JSON.stringify(ordersTemp), () => {
       setOrders(ordersTemp)
     })
@@ -81,7 +77,7 @@ export default function Basket({ navigation: { navigate, goBack } }) {
           {orders.map((_orderGroup, groupIndex) => {
             let TotalPrice = 0;
             return (
-              <View style={{ margin: 10, padding: 0, borderRadius: 10, backgroundColor: "#7AEC6720" }}>
+              <View key={groupIndex} style={{ margin: 10, padding: 0, borderRadius: 10, backgroundColor: "#7AEC6720" }}>
                 <View style={[styles.sectionTitleContainer, { borderTopWidth: 0, marginTop: 5 }]}>
                   <View style={{}}>
                     <Text style={styles.sectionTitleHeading}>{_orderGroup.restaurant.name}</Text>
@@ -113,8 +109,8 @@ export default function Basket({ navigation: { navigate, goBack } }) {
                             style={styles.dishOptionSubTitle}>
                             {_order.dish_variant.name}
                           </Text>
-                          {_order.complements.map(_complement =>
-                            <Text
+                          {_order.complements.map((_complement, complement_id) =>
+                            <Text key={groupIndex + "-" + index + '-' + complement_id}
                               style={[styles.dishOptionSubTitle, { color: "#07450D" }]}>
                               → {_complement.name}
                             </Text>
@@ -157,7 +153,7 @@ export default function Basket({ navigation: { navigate, goBack } }) {
                       {'Offrir ● ' + numberWithCommas(TotalPrice + 1000) + 'Frs'}
                     </Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={{ ...styles.primaryButton, marginHorizontal: 10, paddingHorizontal: 20 }} onPressOut={() => { }}>
+                  <TouchableOpacity style={{ ...styles.primaryButton, marginHorizontal: 10, paddingHorizontal: 20 }} onPress={() => setOrderModalInfo(_orderGroup)}>
                     <Text
                       style={{ ...styles.primaryButtonText, fontSize: 16 }}>
                       {'Acheter ● ' + numberWithCommas(TotalPrice + 1000) + 'Frs'}
@@ -170,7 +166,9 @@ export default function Basket({ navigation: { navigate, goBack } }) {
           )
           }
 
-
+          {orderModalInfo  ?
+            <OrderModal modalVisible={orderModalInfo  ? true : false} modalInfo={orderModalInfo} onModalClosed={setOrderModalInfo} />
+            : <></>}
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -18,7 +18,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "package": "com.prepex.main"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -36,6 +41,11 @@
           "locationWhenInUsePermission": "Show current location on map."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "9dcac3b3-22fa-4c3b-bdf5-b7b0c1991835"
+      }
+    }
   }
 }
