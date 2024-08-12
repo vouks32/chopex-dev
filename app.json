@@ -22,6 +22,20 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsDownloadToken": "pk.eyJ1Ijoidm91a3MiLCJhIjoiY2x6b2FjdXp0MHVzYTJrcG5vOWtpaG9vZiJ9.e9_3TH4qEosn8zGpUH913A"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Show current location on map."
+        }
+      ]
+    ]
   }
 }

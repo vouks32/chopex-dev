@@ -1,0 +1,3 @@
+- moyen (page Home) affichage des produits par intérêt récent, affichage des restos par localisation par rapport au user
+- Simple (page Restaurant) ajout d'autres produits d'autres restaurants, correspondant au produits du restaurant ouvert
+- complex (page du panier) Finalisation de la commandes des produits(localisation, numéro à contacter), affichage du statut de la commande (carte de la localisation, informations de la commande)
