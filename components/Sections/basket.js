@@ -39,7 +39,7 @@ const BasketButton = ({ navigate, newBasketLength }) => {
                         }}
                     />
 
-                    <Text style={{ position: 'absolute', top: 0, right: -3, backgroundColor: 'red', color: 'white', paddingVertical: 0, paddingHorizontal: 2, borderRadius: 5, }}>{basket.length}</Text>
+                    <Text style={{ position: 'absolute', top: 0, right: -3, backgroundColor: 'red', color: 'white', paddingVertical: 0, paddingHorizontal: 2, borderRadius: 5, }}>{basket?.length}</Text>
                 </View>
                 :
                 <></>
