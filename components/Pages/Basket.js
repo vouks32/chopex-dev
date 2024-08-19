@@ -109,8 +109,10 @@ export default function Basket({ navigation: { navigate, goBack } }) {
                             style={styles.dishOptionSubTitle}>
                             {_order.dish_variant.name}
                           </Text>
-                          {_order.complements.map((_complement, complement_id) =>
-                            <Text key={groupIndex + "-" + index + '-' + complement_id}
+
+                          {_order.complements.map((_complement, _complementIndex) =>
+                            <Text key={groupIndex + "-" + index + "-" + _complementIndex}
+
                               style={[styles.dishOptionSubTitle, { color: "#07450D" }]}>
                               → {_complement.name}
                             </Text>

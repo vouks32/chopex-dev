@@ -19,12 +19,15 @@ import CategoryDetail from './components/Pages/CategoryDetail.js';
 import RestaurantDetail from './components/Pages/RestaurantDetail.js';
 import EventDetail from './components/Pages/EventDetails.js';
 import FoodDetail from './components/Pages/FoodDetail.js';
+
 import TestPage from './components/Pages/TestPage.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
-  
+
+  //AsyncStorage.clear()
   StatusBar.setBackgroundColor('#FFFFFF00')
   StatusBar.setBarStyle('default')
   return (
