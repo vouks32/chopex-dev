@@ -3,7 +3,7 @@ import { Link, router } from 'expo-router';
 import { Image, View, Text, ScrollView, TouchableOpacity, TextInput, ImageBackground, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { styles, screenWidth, screenHeight } from '../Style';
-import { wallet, search, cart } from '../defaults/images';
+import { wallet, search, cart, profil } from '../defaults/images';
 import { GetRestaurantsLocal } from '../firestore/restaurants';
 import { BasketButton } from '../Sections/basket';
 
@@ -24,9 +24,16 @@ export default function Home({ navigation: { navigate } }) {
 
         {/* TOP SECTION WITH LOCATION, WALLET, AND BASKET*/}
         <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 14, marginHorizontal: 17, }}>
-          <Text style={{ color: "#000000", fontSize: 16, fontWeight: "bold", marginRight: 4, }}>
-            {"Yaoundé ▾"}
-          </Text>
+          <View style={styles.backButton}>
+            <Image
+              source={profil}
+              resizeMode={"stretch"}
+              style={{
+                height: "100%",
+                width: "100%",
+              }}
+            />
+          </View>
           <View
             style={{
               flex: 1,
@@ -42,7 +49,7 @@ export default function Home({ navigation: { navigate } }) {
               }}
             />
           </View>
-          <BasketButton navigate={(name)=>{
+          <BasketButton navigate={(name) => {
             navigate(name)
           }} />
         </View>
@@ -113,7 +120,7 @@ export default function Home({ navigation: { navigate } }) {
               <Text style={styles.eventContainerSubTitle}>{"Économisez sur vos commandes"} </Text>
             </View>
             <View>
-              <Text style={[styles.eventContainerPriceText, {fontSize: 20}]}>
+              <Text style={[styles.eventContainerPriceText, { fontSize: 20 }]}>
                 {"  →  "}
               </Text>
             </View>
@@ -170,7 +177,7 @@ export default function Home({ navigation: { navigate } }) {
               <Text style={styles.eventContainerSubTitle}>{"Économisez en frais de livraison"} </Text>
             </View>
             <View>
-              <Text style={[styles.eventContainerPriceText, {fontSize: 20}]}>
+              <Text style={[styles.eventContainerPriceText, { fontSize: 20 }]}>
                 {"  →  "}
               </Text>
             </View>
@@ -212,7 +219,7 @@ export default function Home({ navigation: { navigate } }) {
                       {item.item.description}
                     </Text>
                   </View>
-                 
+
                 </View>
               </View>
             )}

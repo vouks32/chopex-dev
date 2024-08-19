@@ -81,7 +81,7 @@ export default function Basket({ navigation: { navigate, goBack } }) {
           {orders.map((_orderGroup, groupIndex) => {
             let TotalPrice = 0;
             return (
-              <View style={{ margin: 10, padding: 0, borderRadius: 10, backgroundColor: "#7AEC6720" }}>
+              <View key={groupIndex} style={{ margin: 10, padding: 0, borderRadius: 10, backgroundColor: "#7AEC6720" }}>
                 <View style={[styles.sectionTitleContainer, { borderTopWidth: 0, marginTop: 5 }]}>
                   <View style={{}}>
                     <Text style={styles.sectionTitleHeading}>{_orderGroup.restaurant.name}</Text>
@@ -113,8 +113,8 @@ export default function Basket({ navigation: { navigate, goBack } }) {
                             style={styles.dishOptionSubTitle}>
                             {_order.dish_variant.name}
                           </Text>
-                          {_order.complements.map(_complement =>
-                            <Text
+                          {_order.complements.map((_complement, _complementIndex) =>
+                            <Text key={groupIndex + "-" + index + "-" + _complementIndex}
                               style={[styles.dishOptionSubTitle, { color: "#07450D" }]}>
                               → {_complement.name}
                             </Text>
