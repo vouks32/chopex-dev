@@ -18,19 +18,35 @@ import CategoryDetail from './components/Pages/CategoryDetail.js';
 import RestaurantDetail from './components/Pages/RestaurantDetail.js';
 import EventDetail from './components/Pages/EventDetails.js';
 import FoodDetail from './components/Pages/FoodDetail.js';
+<<<<<<< Updated upstream
+=======
+import AsyncStorage from '@react-native-async-storage/async-storage';
+//import TestPage from './components/Pages/TestPage.js';
+>>>>>>> Stashed changes
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   
+  //AsyncStorage.clear()
   StatusBar.setBackgroundColor('#FFFFFF00')
   StatusBar.setBarStyle('default')
   return (
     <NavigationContainer>
+<<<<<<< Updated upstream
       <Stack.Navigator initialRouteName='Home'> 
         <Stack.Screen name="Welcome" component={Welcome} options={{headerShown : false}} />
         <Stack.Screen name="SignUp" component={SignUp} options={{headerShown : false}}/>
         <Stack.Screen name="LogIn" component={LogIn} options={{headerShown : false}}/>
+=======
+      <Stack.Navigator initialRouteName='Welcome'> 
+        <Stack.Screen name="Welcome" component={Welcome} options={{headerShown : false}} />
+        <Stack.Screen name="SignUp" component={SignUp} options={{headerShown : false}}/>
+        <Stack.Screen name="LogIn" component={LogIn} options={{headerShown : false}}/>
+       {/**
+        * <Stack.Screen name="Test" component={TestPage} options={{headerShown : false}}/>
+        */} 
+>>>>>>> Stashed changes
 
         <Stack.Screen name="Home" component={Home} options={{headerShown : false}}/>
         <Stack.Screen name="Search" component={Search} options={{headerShown : false}}/>
