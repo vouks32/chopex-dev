@@ -1,6 +1,7 @@
 import db from "./initialise";
+import firebase from "firebase/compat/app";
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { collection, getDocs, query, where, doc, setDoc, addDoc } from 'firebase/firestore/lite';
+import { collection, getDocs, query, where, doc, setDoc, addDoc, getDoc, arrayUnion, writeBatch } from 'firebase/firestore/lite';
 
 let _isLoading = true;
 let _isError = null;
@@ -109,11 +110,40 @@ const getProfilLocal = async () => {
     return JSON.parse(profilText);
 }
 
-function getProfilErrorState() {
-    return _isError;
+const makeTransaction = async (amount, reason, from = null, to = null) => {
+    if (reason == 'order_payment') {
+        const batch = writeBatch(db);
+        var ProfilRef = await getDoc(collection(db, "Col_Profils_Clients", profil.id));
+        let profil = ProfilRef.data();
+        profil.id = ProfilRef.id;
+
+        batch.update(ProfilRef, {
+            "wallet.transactions": arrayUnion({
+                transaction_id: profil.id + "-" + Date.now(),
+                from: "wallet", // momo: when added to his wallet from mobile money, chopex: when added from the app to his wallet (refund)
+                to: "chopex", // wallet: when money is added to the wallet (funding wallet or refund), chopex: when sending to the app (buying an order)
+                amount: amount,
+            })
+        })
+        batch.update(ProfilRef, {
+            "wallet.amount": profil.wallet.amount - amount
+        })
+        await batch.commit();
+
+        ProfilRef = await getDoc(collection(db, "Col_Profils_Clients", profil.id));
+        profil = ProfilRef.data();
+        profil.id = ProfilRef.id;
+        console.log("Amount Deducted :", amount)
+        console.log("Profil.Wallet :", profil.wallet)
+        await AsyncStorage.setItem('Profil', JSON.stringify(profil))
+
+
+    }
+
+    return;
 }
 
-export { getProfilCollection, getProfilLocal, getProfilErrorState, SignInProfil, LoginInProfil }
+export { getProfilCollection, getProfilLocal, SignInProfil, LoginInProfil }
 
 /*
 
@@ -132,7 +162,7 @@ User Profil Object :
             transactions: [
              {
                transaction_id: string,
-               from : string, // momo: when added to his wallet from mobile money, chopex: when added from the app to his wallet (refund)
+               from : string, // momo: when added to his wallet from mobile money, chopex: when added from the app to his wallet, wallet: when paying an order(refund)
                to : string, // wallet: when money is added to the wallet (funding wallet or refund), chopex: when sending to the app (buying an order)
                amount: int,
              }
