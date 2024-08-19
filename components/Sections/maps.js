@@ -1,4 +1,5 @@
-import Mapbox from "@rnmapbox/maps";
+/**
+ import Mapbox from "@rnmapbox/maps";
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -32,3 +33,4 @@ export const MiniMap = () => {
         </View>
     );
 }
+  */
