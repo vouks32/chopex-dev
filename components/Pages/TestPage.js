@@ -14,7 +14,7 @@ export default function TestPage({ navigation: { navigate } }) {
           flex: 1,
           backgroundColor: "#FFFFFF"
         }}>
-       <MiniMap/>
+          <MiniMap/>
       </ScrollView>
     </SafeAreaView>
   );

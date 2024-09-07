@@ -9,24 +9,31 @@ import { styles } from '../Style';
 
 const BasketButton = ({ navigate, newBasketLength }) => {
     const [basket, setBasket] = useState(null)
+    const [orders, setOrders] = useState(null)
 
     const getBasketStorage = async () => {
         let _basket = await AsyncStorage.getItem('Basket')
+        let _orders = await AsyncStorage.getItem('Orders')
         if (_basket)
             _basket = JSON.parse(_basket)
         else
             _basket = []
         setBasket(_basket)
+        if (_orders)
+            _orders = JSON.parse(_orders)
+        else
+            _orders = []
+        setOrders(_orders)
     }
 
-    if (basket == null || (newBasketLength && basket && newBasketLength != basket.length)) {
+    if (orders == null || basket == null || (newBasketLength && basket && newBasketLength != basket.length)) {
         console.log(" Basket button: basket :", basket?.length, "new lenght: ", newBasketLength)
 
         getBasketStorage()
     }
     return (
         <View>
-            {basket && basket.length > 0 ?
+            {(basket && basket.length > 0) || (orders && orders.length > 0)  ?
                 <View onTouchEnd={() => { navigate('Basket') }} style={[styles.backButton, {}]}>
                     <Image
                         source={cart}
@@ -39,7 +46,8 @@ const BasketButton = ({ navigate, newBasketLength }) => {
                         }}
                     />
 
-                    <Text style={{ position: 'absolute', top: 0, right: -3, backgroundColor: 'red', color: 'white', paddingVertical: 0, paddingHorizontal: 2, borderRadius: 5, }}>{basket?.length}</Text>
+<Text style={{ position: 'absolute', top: 0, right: -3, backgroundColor: 'red', color: 'white', paddingVertical: 0, paddingHorizontal: 2, borderRadius: 5, }}>{basket?.length}</Text>
+<Text style={{ position: 'absolute', top: 0, left: -3, backgroundColor: 'green', color: 'white', paddingVertical: 0, paddingHorizontal: 2, borderRadius: 5, }}>{orders?.length}</Text>
                 </View>
                 :
                 <></>

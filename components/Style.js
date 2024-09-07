@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "#FFFFFF",
 		paddingBottom: 30,
-		paddingTop: 10,
 	},
 	errorBox: {
 		textAlign: 'center',
@@ -190,18 +189,23 @@ const styles = StyleSheet.create({
 		color: "#000000",
 		fontSize: 16,
 		fontWeight: "bold",
+		marginTop: 5,
 	  },
 	dishOptionSubTitle: {
 		color: "#00000088",
 		fontSize: 14,
 		fontWeight: "bold",
-		marginTop: 5,
 	  },
 	  dishOptionPrice: {
 		color: "#07450D",
 		fontSize: 18,
 		fontWeight: "bold",
 		marginTop: 5,
+	  },
+	  WebViewContainer: {
+		flex: 1,
+		marginTop: 10,
+		height: screenHeight,
 	  }
 });
 export { styles, screenHeight, screenWidth }

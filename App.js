@@ -14,7 +14,7 @@ import Home from './components/Pages/Home.js';
 import Search from './components/Pages/Search.js';
 import Wallet from './components/Pages/Wallet.js';
 import Basket from './components/Pages/Basket.js';
-import OrderDetail from './components/Pages/OrderDetail.js';
+import OrderDetails from './components/Pages/OrderDetails.js';
 import CategoryDetail from './components/Pages/CategoryDetail.js';
 import RestaurantDetail from './components/Pages/RestaurantDetail.js';
 import EventDetail from './components/Pages/EventDetails.js';
@@ -28,11 +28,18 @@ const Stack = createNativeStackNavigator();
 function App() {
 
   //AsyncStorage.clear()
-  StatusBar.setBackgroundColor('#FFFFFF00')
-  StatusBar.setBarStyle('default')
+  //StatusBar.setBackgroundColor('#FFFFFF00')
+ // StatusBar.setBarStyle('default')
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Test'> 
+      <StatusBar
+        animated={true}
+        backgroundColor="#7AEC67"
+        barStyle={'dark-content'}
+        showHideTransition={'slide'}
+        hidden={false}
+      />
+      <Stack.Navigator initialRouteName='OrderDetails'> 
         <Stack.Screen name="Welcome" component={Welcome} options={{headerShown : false}} />
         <Stack.Screen name="SignUp" component={SignUp} options={{headerShown : false}}/>
         <Stack.Screen name="LogIn" component={LogIn} options={{headerShown : false}}/>
@@ -41,7 +48,7 @@ function App() {
         <Stack.Screen name="Home" component={Home} options={{headerShown : false}}/>
         <Stack.Screen name="Search" component={Search} options={{headerShown : false}}/>
         <Stack.Screen name="Basket" component={Basket} options={{headerShown : false}}/>
-        <Stack.Screen name="OrderDetail" component={OrderDetail} options={{headerShown : false}}/>
+        <Stack.Screen name="OrderDetails" component={OrderDetails} options={{headerShown : false}}/>
         <Stack.Screen name="Wallet" component={Wallet} options={{headerShown : false}}/>
         <Stack.Screen name="CategoryDetail" component={CategoryDetail} options={{headerShown : false}}/>
         <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} options={{headerShown : false}}/>

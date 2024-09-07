@@ -40,7 +40,8 @@
         {
           "locationWhenInUsePermission": "Show current location on map."
         }
-      ]
+      ],
+      "expo-asset"
     ],
     "extra": {
       "eas": {

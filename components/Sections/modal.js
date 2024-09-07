@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link, router } from 'expo-router';
-import { Image, View, Text, ScrollView, TouchableOpacity, TextInput, ImageBackground, Modal, Pressable, StyleSheet, FlatList } from 'react-native';
+import { Image, View, Text, ScrollView, TouchableOpacity, TextInput, ImageBackground, Modal, Pressable, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { screenWidth, screenHeight } from '../Style';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { getProfilLocal } from '../firestore/profil';
+import { verifyNumber } from '../functions';
 
 
 
@@ -104,37 +105,30 @@ const OrderModal = ({ modalVisible = null, modalInfo, onModalClosed }) => {
         Nombre_de_plat++;
     });
 
-    const [value, setValue] = useState(null);
-    const [isFocus, setIsFocus] = useState(false);
+    const [numberToContact, setNumberToContact] = useState(null);
+    const [numberToPay, setNumberToPay] = useState(null);
+    const [errorText, setErrorText] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [profil, setProfil] = useState(false);
-    const [pdlData, setpdlData] = useState([]);
+    const [paimentNumIsContact, setPaimentNumIsContact] = useState(true);
     const data = [];
 
     if (!profil) {
         getProfilLocal().then((prof) => {
             setProfil(prof)
-            console.log(prof.points_de_livraisons)
-            prof.points_de_livraisons.forEach((pdl, index) => {
-                data.push({
-                    'id': index,
-                    'name': pdl.name,
-                    'quater': pdl.quater,
-                    'localisation': pdl.localisation.lat + "," + pdl.localisation.lon
-                })
-            })
-            setpdlData(data)
+
         })
     }
-    const renderLabel = () => {
-        if (value || isFocus) {
-            return (
-                <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-                    Dropdown label
-                </Text>
-            );
-        }
-        return null;
-    };
+    /*/ const renderLabel = () => {
+         if (value || isFocus) {
+             return (
+                 <Text style={[styles.label, isFocus && { color: 'blue' }]}>
+                     Dropdown label
+                 </Text>
+             );
+         }
+         return null;
+     };*/
     return (
         <Modal
             animationType="fade"
@@ -144,6 +138,7 @@ const OrderModal = ({ modalVisible = null, modalInfo, onModalClosed }) => {
                 onModalClosed();
             }}
         >
+
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                     <Text style={styles.modalTextTitle}>Résumé de la Commande</Text>
@@ -152,62 +147,113 @@ const OrderModal = ({ modalVisible = null, modalInfo, onModalClosed }) => {
                     <Text style={styles.modalText}>Nombre de plats:</Text>
                     <Text style={[styles.modalText, { fontWeight: 'bold', marginTop: 0 }]}>{Nombre_de_plat} Plat(s)</Text>
                     <Text style={styles.modalText}>Total:</Text>
-                    <Text style={[styles.modalText, { fontWeight: 'bold', marginTop: 0 }]}>{TotalPrice + 1000} frs</Text>
+                    <Text style={[styles.primaryButtonText, { fontWeight: 'bold', marginTop: 0 }]}>{TotalPrice + 1000} frs</Text>
+                    {
+                        /**
+                         * <Text style={styles.modalTextTitle}>Point de Livraison</Text>
+                                        <View style={styles.container}>
+                                            {renderLabel()}
+                                            <Dropdown
+                                                style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                                                placeholderStyle={styles.placeholderStyle}
+                                                selectedTextStyle={styles.selectedTextStyle}
+                                                inputSearchStyle={styles.inputSearchStyle}
+                                                search={false}
+                                                iconStyle={styles.iconStyle}
+                                                data={pdlData}
+                                                maxHeight={300}
+                                                labelField="name"
+                                                valueField="id"
+                                                placeholder={!isFocus ? 'Choisissez un point de livraison' : '...'}
+                                                searchPlaceholder="Search..."
+                                                value={value}
+                                                onFocus={() => setIsFocus(true)}
+                                                onBlur={() => setIsFocus(false)}
+                                                onChange={item => {
+                                                    setValue(item.value);
+                                                    setIsFocus(false);
+                                                }}
+                                                renderLeftIcon={() => (
+                                                    <AntDesign
+                                                        style={styles.icon}
+                                                        color={isFocus ? 'blue' : 'black'}
+                                                        name="Safety"
+                                                        size={20}
+                                                    />
+                                                )}
+                                                renderItem={item => {
+                                                    return (
+                                                        <View style={{padding: 10}}>
+                                                            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
+                                                            <Text style={{ fontSize: 14, fontWeight: 'bold', color: "#20202080"}}>{item.quater+" ("+item.localisation+")"}</Text>
+                    
+                                                        </View>
+                                                    );
+                                                }}
+                                            />
+                                        </View> 
+                         */
+                    }
+                    <Text style={[styles.modalTextTitle, { marginTop: 20 }]}><Text style={{ fontSize: 18 }}>📞</Text> Numéro à contacter</Text>
+                    <TextInput style={styles.textInput} placeholder='691...' onChangeText={newText => setNumberToContact(newText)}></TextInput>
+                    <View onTouchEnd={() => { setPaimentNumIsContact(!paimentNumIsContact) }} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20, marginTop: -10, marginBottom: 10 }}>
+                        <Image
+                            source={{ uri: paimentNumIsContact ? "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Eo_circle_green_checkmark.svg/800px-Eo_circle_green_checkmark.svg.png" : "https://docs.blender.org/manual/sl/3.6/_images/grease-pencil_modes_draw_tools_circle_example-02.png" }}
+                            resizeMode={"stretch"}
+                            style={{
+                                width: 25,
+                                height: 25,
 
-                    <Text style={styles.modalTextTitle}>Point de Livraison</Text>
-                    <View style={styles.container}>
-                        {renderLabel()}
-                        <Dropdown
-                            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                            placeholderStyle={styles.placeholderStyle}
-                            selectedTextStyle={styles.selectedTextStyle}
-                            inputSearchStyle={styles.inputSearchStyle}
-                            search={false}
-                            iconStyle={styles.iconStyle}
-                            data={pdlData}
-                            maxHeight={300}
-                            labelField="name"
-                            valueField="id"
-                            placeholder={!isFocus ? 'Choisissez un point de livraison' : '...'}
-                            searchPlaceholder="Search..."
-                            value={value}
-                            onFocus={() => setIsFocus(true)}
-                            onBlur={() => setIsFocus(false)}
-                            onChange={item => {
-                                setValue(item.value);
-                                setIsFocus(false);
-                            }}
-                            renderLeftIcon={() => (
-                                <AntDesign
-                                    style={styles.icon}
-                                    color={isFocus ? 'blue' : 'black'}
-                                    name="Safety"
-                                    size={20}
-                                />
-                            )}
-                            renderItem={item => {
-                                return (
-                                    <View style={{padding: 10}}>
-                                        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
-                                        <Text style={{ fontSize: 14, fontWeight: 'bold', color: "#20202080"}}>{item.quater+" ("+item.localisation+")"}</Text>
-
-                                    </View>
-                                );
                             }}
                         />
+                        <Text style={[{ marginTop: 0, marginHorizontal: 10 }]}>Le numéro à contacter est le numéro de paiement</Text>
                     </View>
 
-                    
+                    {!paimentNumIsContact ?
+                        <View>
+                            <Text style={styles.modalTextTitle}><Text style={{ fontSize: 18 }}>💰</Text> Numéro de paiement</Text>
+                            <TextInput style={styles.textInput} placeholder='691...' onChangeText={newText => setNumberToPay(newText)}></TextInput>
+                        </View>
+                        :
+                        <></>
+                    }
+
+                    {errorText ?
+                        <Text style={[styles.errorText, { marginTop: 0, marginHorizontal: 10 }]}>{errorText}</Text>
+
+                        :
+                        <></>}
 
 
                     <Pressable
+                        disabled={isLoading}
                         style={[styles.primaryButton, { marginTop: 20, paddingVertical: 15, marginHorizontal: 5 }]}
                         onPress={() => {
-                            onModalClosed()
+                            console.log(numberToContact, numberToPay)
+                            if (!verifyNumber(numberToContact).isGood) {
+                                setErrorText("numéro à contacter :" + verifyNumber(numberToContact).error+", "+ verifyNumber(numberToContact).explanation)
+                                return
+                            }
+                            if (!paimentNumIsContact && !verifyNumber(numberToPay).isGood) {
+                                setErrorText("numéro de paiement :" + verifyNumber(numberToPay).error+", "+ verifyNumber(numberToPay).explanation)
+                                return
+                            }
+                            setIsLoading(true)
+                            onModalClosed(profil, numberToContact, paimentNumIsContact? numberToContact : numberToPay )
                         }}>
-                        <Text style={styles.primaryButtonText}>Passer Commande</Text>
+                        {isLoading ?
+                            <ActivityIndicator size={'small'} />
+                            :
+                            <Text style={styles.primaryButtonText}>Passer Commande</Text>
+                        }
                     </Pressable>
                 </View>
+                <Pressable
+                    style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+                    onPress={() => {
+                        onModalClosed()
+                    }}>
+                </Pressable>
             </View>
         </Modal>
     );
@@ -297,13 +343,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     modalText: {
-        marginTop: 10,
+        marginTop: 5,
         fontSize: 18,
 
     },
     modalTextTitle: {
         marginVertical: 5,
-        fontSize: 24,
+        fontSize: 22,
         textAlign: 'center',
         fontWeight: 'bold'
     },
@@ -344,6 +390,10 @@ const styles = StyleSheet.create({
         height: 40,
         fontSize: 16,
     },
+    errorText: {
+        textAlign: 'center',
+        color: 'red'
+    }
 });
 
 const WalletModal = ({ setVisible = false, onModalClosed }) => {

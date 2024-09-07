@@ -1,26 +1,24 @@
 import React, { useState } from 'react';
-import { Link, router } from 'expo-router';
 import { Image, View, Text, ScrollView, TouchableOpacity, TextInput, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native';
-import { wallet } from '../defaults/images';
 import { styles } from '../Style';
+import { wallet } from '../defaults/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { numberWithCommas } from '../functions';
+import { WebView } from 'react-native-webview';
 
-export default function OrderDetail({ navigation: { navigate, goBack } }) {
-  const [orders, setOrders] = useState([])
+export default function OrderDetails({ navigation: { navigate, goBack } }) {
+  const [Orders, setOrders] = useState(null)
 
   const getBasketStorage = async () => {
-    let basket = await AsyncStorage.getItem('Basket')
-    if (basket)
-      basket = JSON.parse(basket)
+    let orders = await AsyncStorage.getItem('Orders')
+    if (orders)
+      orders = JSON.parse(orders)
     else
-      basket = []
-    console.log("basket page there are", basket)
-    setOrders(basket)
+      orders = []
+    setOrders(orders)
   }
 
-  if (orders.length == 0) {
+  if (!Orders) {
     getBasketStorage()
   }
 
@@ -29,6 +27,14 @@ export default function OrderDetail({ navigation: { navigate, goBack } }) {
       style={styles.viewport}>
       <ScrollView
         style={styles.defaultScollView}>
+
+        {/** MAP */}
+        <WebView
+          geolocationEnabled={true}
+          javaScriptEnabled={true}
+          style={styles.WebViewContainer}
+          source={{ uri: 'https://stripe-sturdy-zinc.glitch.me/' }}
+        />
 
         {/* TOP Line with back button */}
         <View style={{ paddingBottom: 0, alignItems: 'center', zIndex: 80, flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
@@ -49,6 +55,7 @@ export default function OrderDetail({ navigation: { navigate, goBack } }) {
             />
           </View>
         </View>
+
 
       </ScrollView>
     </SafeAreaView>

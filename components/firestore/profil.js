@@ -143,7 +143,21 @@ const makeTransaction = async (amount, reason, from = null, to = null) => {
     return;
 }
 
-export { getProfilCollection, getProfilLocal, SignInProfil, LoginInProfil }
+const placeOrder = async (order) => {
+   // USER DOESN'T EXIST SO SIGN IN
+   let o = order;
+   const docRef = await addDoc(collection(db, "Col_Orders"), order);
+   o.id = docRef.id;
+   let storageOrders = await AsyncStorage.getItem('Orders');
+   storageOrders = storageOrders? storageOrders : "[]";
+   storageOrders = JSON.parse(storageOrders)
+   storageOrders.push(o)
+   await AsyncStorage.setItem('Orders', JSON.stringify(storageOrders))
+
+    return;
+}
+
+export { getProfilCollection, getProfilLocal, SignInProfil, LoginInProfil, placeOrder }
 
 /*
 
